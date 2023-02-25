@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="icon" type="image/x-icon" href="img/fractal F.jpg">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<script src="js/main.js" type="text/javascript" charset="utf-8" async defer></script>
+	<title>Fractals</title>
+</head>
+<body id="body">
+	<div class="wrapper">
+		<!-- HEADER -->
+		<header class="header">
+
+			<div class="top-left">
+				<h1 class="title">
+					<a href="home.html">
+						<img src="img/fractal title.jpg">
+					</a>
+				</h1>
+				<h2 class="caption">for consumption</h2>
+			</div>
+
+			<div class="top-right">
+				<h4 class="big-buttons signup-offer"><a href="signup.html">Sign up today and get 25% off!*</a></h4>
+
+				<h2 class="big-buttons header-book"><a href="book.html">Book now!</a></h2>
+
+				<div class="search">
+					<input type="text" id="search" class="search-input" placeholder="The multiverse awaits" title="Find them">
+
+					<button id="search-button" class="search-button" type="button">Search</button>
+				</div>
+			</div>
+		</header>
+
+		<!-- NAVIGATION -->
+		<nav class="nav">
+			<ul>
+				<li><a href="home.html">Home</a></li>•
+				<li><a href="book.html">Book</a></li>•
+				<li><a href="locations.html">Locations</a></li>•
+				<li><a href="menu.html">Menu</a></li>•
+				<li><a href="kids.html">Kids</a></li>•
+				<li><a href="takeaway.html">Takeaway</a></li>•
+				<li><a href="giftcards.html">Gift cards</a></li>•
+				<li><a href="offers.html">Offers</a></li>
+			</ul>
+		</nav>
+
+		<!-- CONTENT -->
+		<section class="main">
+			<div class="menu-container">
+				<img class="menu-img" src="img/menu/menger_menu.jpg" alt="">
+
+				<h2>View the Menu</h2>
+
+				<p>Whether you want 1.3 dimensions or 2.98, we have what you want. Consume now, before it happens.</p>
+
+				<div class="menu-tiles">
+
+					<h2 class="menu-item">STARTERS</h2>
+
+					<div class="tile">
+						<img src="img/menu/koch.jpg">
+						<div class="tile-text">
+							<h2>Koch Snowflake</h2>
+							<p class="text-hidden">feels like eating nothing at all!</p>
+						</div>
+						<button data-index="0" class="tile-button" type="button"></button>
+					</div>
+
+					<div class="tile">
+						<img src="img/menu/twindragon.png">
+						<div class="tile-text">
+							<h2>Twindragon Boundary</h2>
+							<p class="text-hidden">the edge of satisfaction</p>
+						</div>
+						<button data-index="1" class="tile-button" type="button"></button>
+					</div>
+
+					<div class="tile">
+						<img src="img/menu/cantordust.png">
+						<div class="tile-text">
+							<h2>Cantor Dust</h2>
+							<p class="text-hidden">our lowest calorie starter</p>
+						</div>
+						<button data-index="2" class="tile-button" type="button"></button>
+					</div>
+
+					<h2 class="menu-item">MAINS</h2>
+
+					<div class="tile">
+						<img src="img/menu/sierp.jpg">
+						<div class="tile-text">
+							<h2>Sierpinski Tetrahedron</h2>
+							<p class="text-hidden">your favourite triangles, extruded</p>
+						</div>
+						<button data-index="3" class="tile-button" type="button"></button>
+					</div>
+
+					<div class="tile">
+						<img src="img/menu/menger.jpg">
+						<div class="tile-text">
+							<h2>Menger Sponge</h2>
+							<p class="text-hidden">soak it all up, babey</p>
+						</div>
+						<button data-index="4" class="tile-button" type="button"></button>
+					</div>
+
+					<div class="tile">
+						<img src="img/menu/mandelbulb.jpg">
+						<div class="tile-text">
+							<h2>Mandelbulb</h2>
+							<p class="text-hidden">mandelbrot. upgraded</p>
+						</div>
+						<button data-index="5" class="tile-button" type="button"></button>
+					</div>
+
+					<h2 class="menu-item">DESSERTS</h2>
+
+					<div class="tile">
+						<img src="img/menu/apollonian.png">
+						<div class="tile-text">
+							<h2>Apollonian Sphere</h2>
+							<p class="text-hidden">feel the spaces inbetween</p>
+						</div>
+						<button data-index="6" class="tile-button" type="button"></button>
+					</div>
+
+					<div class="tile">
+						<img src="img/menu/coast.jpg">
+						<div class="tile-text">
+							<h2>Coastline of Great Britain</h2>
+							<p class="text-hidden">refreshing. salty.</p>
+						</div>
+						<button data-index="7" class="tile-button" type="button"></button>
+					</div>
+
+					<div class="tile">
+						<img src="img/menu/galaxy.jpg">
+						<div class="tile-text">
+							<h2>Galaxy Clusters</h2>
+							<p class="text-hidden">the taste of cosmic latte</p>
+						</div>
+						<button data-index="8" class="tile-button" type="button"></button>
+					</div>
+
+				</div>
+			</div>
+		</section>
+
+		<section id="modals">
+
+			<div data-index="0" class="modal">
+				<div class="modal-content">
+					<h2>Koch Snowflake</h2>
+					<img src="img/menu/koch_desc.gif">
+					<p>
+						The Koch snowflake is a mathematical curve and one of the earliest fractals to have been described. It is based on the Koch curve, which appeared in a 1904 paper titled "On a Continuous Curve Without Tangents, Constructible from Elementary Geometry" by the Swedish mathematician Helge von Koch.
+					<br>
+					<br>
+ 						The Koch snowflake can be built up iteratively, in a sequence of stages. The areas enclosed by the successive stages in the construction of the snowflake converge to 8/5 times the area of the original triangle, while the perimeters of the successive stages increase without bound. Consequently, the snowflake encloses a finite area, but has an infinite perimeter.
+ 					</p>
+				</div>
+			</div>
+			
+			<div data-index="1" class="modal">
+				<div class="modal-content">
+					<h2>Twindragon Boundary</h2>
+					<div>
+						<img src="img/menu/twindragon_desc.png">
+	 					<img src="img/menu/twindragon_eq.png">						
+					</div>
+					<p>
+						The dragon curve is probably most commonly thought of as the shape that is generated from repeatedly folding a strip of paper in half, although there are other curves that are called dragon curves that are generated differently. More generally, a dragon curve is any member of a family of self-similar fractal curves, which can be approximated by recursive methods such as Lindenmayer systems.
+					<br>
+					<br>
+ 						The twindragon (also known as the Davis-Knuth dragon) can be constructed by placing two Heighway dragon curves back to back. It is also the limit set of the iterated function system to the left.
+ 					</p>
+				</div>
+			</div>
+			
+			<div data-index="2" class="modal">
+				<div class="modal-content">
+					<h2>Cantor Dust</h2>
+					<img src="img/menu/cantordust_desc.png">
+					<p>
+						In mathematics, the Cantor set is a set of points lying on a single line segment that has a number of remarkable and deep properties. It was discovered in 1874 by Henry John Stephen Smith and introduced by German mathematician Georg Cantor in 1883.
+					<br>
+					<br>
+						Through consideration of this set, Cantor and others helped lay the foundations of modern point-set topology. Although Cantor himself defined the set in a general, abstract way, the most common modern construction is the Cantor ternary set, built by removing the middle third of a line segment and then repeating the process with the remaining shorter segments. Cantor himself mentioned the ternary construction only in passing, as an example of a more general idea, that of a perfect set that is nowhere dense.
+					<br>
+					<br>
+ 						Cantor dust is a multi-dimensional version of the Cantor set. It can be formed by taking a finite Cartesian product of the Cantor set with itself, making it a Cantor space. Like the Cantor set, Cantor dust has zero measure.
+ 					</p>
+				</div>
+			</div>
+			
+			<div data-index="3" class="modal">
+				<div class="modal-content">
+					<h2>Sierpinski Tetrahedron</h2>
+					<img src="img/menu/sierp_desc.png">
+					<p>
+						The Sierpinski triangle (also with the original orthography Sierpiński), also called the Sierpinski gasket or Sierpinski sieve, is a fractal and attractive fixed set with the overall shape of an equilateral triangle, subdivided recursively into smaller equilateral triangles. Originally constructed as a curve, this is one of the basic examples of self-similar sets–that is, it is a mathematically generated pattern that is reproducible at any magnification or reduction. It is named after the Polish mathematician Wacław Sierpiński, but appeared as a decorative pattern many centuries before the work of Sierpiński.
+					<br>
+					<br>
+ 						The Sierpinski tetrahedron or tetrix is the three-dimensional analogue of the Sierpinski triangle, formed by repeatedly shrinking a regular tetrahedron to one half its original height, putting together four copies of this tetrahedron with corners touching, and then repeating the process.
+ 					</p>
+				</div>
+			</div>
+			
+			<div data-index="4" class="modal">
+				<div class="modal-content">
+					<h2>Menger Sponge</h2>
+					<img src="img/menu/menger_desc.webp">
+					<div>
+						<p>
+							In mathematics, the Menger sponge (also known as the Menger cube, Menger universal curve, Sierpinski cube, or Sierpinski sponge)[1][2][3] is a fractal curve. It is a three-dimensional generalization of the one-dimensional Cantor set and two-dimensional Sierpinski carpet. It was first described by Karl Menger in 1926, in his studies of the concept of topological dimension.
+						<br>
+						<br>
+	 						The construction of a Menger sponge can be described as follows:
+	 					<br>
+	 					<br>
+	 					</p>
+	 						<ol>
+	 							<li>Begin with a cube.</li>
+	 							<br>
+	 							<li>Divide every face of the cube into nine squares, like a Rubik's Cube. This sub-divides the cube into 27 smaller cubes.</li>
+	 							<br>
+	 							<li>Remove the smaller cube in the middle of each face, and remove the smaller cube in the very center of the larger cube, leaving 20 smaller cubes. This is a level-1 Menger sponge (resembling a void cube).</li>
+	 							<br>
+	 							<li>Repeat steps two and three for each of the remaining smaller cubes, and continue to iterate ad infinitum.</li>
+	 						</ol>
+	 					<br>
+	 					<p>
+							The second iteration gives a level-2 sponge, the third iteration gives a level-3 sponge, and so on. The Menger sponge itself is the limit of this process after an infinite number of iterations.
+	 					</p>
+					</div>
+				</div>
+			</div>
+			
+			<div data-index="5" class="modal">
+				<div class="modal-content">
+					<h2>Mandelbulb</h2>
+					<img src="img/menu/mandelbulb_desc.png">
+					<p>
+						The Mandelbulb is a three-dimensional fractal, constructed by Daniel White and Paul Nylander using spherical coordinates in 2009. A canonical 3-dimensional Mandelbrot set does not exist, since there is no 3-dimensional analogue of the 2-dimensional space of complex numbers. It is possible to construct Mandelbrot sets in 4 dimensions using quaternions and bicomplex numbers.
+					<br>
+					<br>
+ 						In the 2014 computer-animated film Big Hero 6, the climax takes place in the middle of a wormhole, which is represented by the stylized interior of a Mandelbulb
+ 					</p>
+				</div>
+			</div>
+			
+			<div data-index="6" class="modal">
+				<div class="modal-content">
+					<h2>Apollonian Sphere</h2>
+					<img src="img/menu/apollonian_desc.png">
+					<p>
+						An Apollonian gasket or Apollonian net is a fractal generated starting from a triple of circles, each tangent to the other two, and successively filling in more circles, each tangent to another three. It is named after Greek mathematician Apollonius of Perga.
+					<br>
+					<br>
+						Apollonian sphere packing is the three-dimensional equivalent of the Apollonian gasket. The principle of construction is very similar: with any four spheres that are cotangent to each other, it is then possible to construct two more spheres that are cotangent to four of them.
+ 						The fractal dimension is approximately 2.47395.
+ 					</p>
+				</div>
+			</div>
+			
+			<div data-index="7" class="modal">
+				<div class="modal-content">
+					<h2>Coastline of Great Britain</h2>
+					<img src="img/menu/coast_desc.png">
+					<p>
+						The coastline paradox is the counterintuitive observation that the coastline of a landmass does not have a well-defined length. This results from the fractal-like properties of coastlines, i.e., the fact that a coastline typically has a fractal dimension (which in fact makes the notion of length inapplicable). The first recorded observation of this phenomenon was by Lewis Fry Richardson and it was expanded upon by Benoit Mandelbrot.
+					<br>
+					<br>
+ 						The paper is important because it is a "turning point" in Mandelbrot's early thinking on fractals. It is an example of the linking of mathematical objects with natural forms that was a theme of much of his later work.
+ 					</p>
+				</div>
+			</div>
+			
+			<div data-index="8" class="modal">
+				<div class="modal-content">
+					<h2>Galaxy Clusters</h2>
+					<img src="img/menu/galaxy_desc.jpg">
+					<p>
+						<b>Basic properties of galaxy clustering in the light of recent results from the Sloan Digital Sky Survey</b>
+					<br>
+					<br>
+ 						We discuss some of the basic implications of recent results on galaxy correlations published by the SDSS collaboration. In particular we focus on the evidence which has been recently presented for the scale and nature of the transition to homogeneity in the galaxy distribution, and results which describe the dependence of clustering on luminosity. The two questions are in fact strictly entangled, as the stability of the measure of the amplitude of the correlation function depends on the scale at which the mean density becomes well defined. We note that the recent results which indicate the convergence to well defined homogeneity in a volume equivalent to that of a sphere of radius 70 Mpc/h, place in doubt previous detections of "luminosity bias"from measures of the amplitude of the correlation function. We emphasize that the way to resolve these issues is to first use, in volume limited samples corresponding to different ranges of luminosity, the unnormalized two point statistics to establish the scale (and value) at which the mean density becomes well defined. We note also that the recent SDSS results for these statistics are in good agreement with those obtained by us through analyses of many previous samples, confirming in particular that the galaxy distribution is well described by a fractal dimension D ~ 2 up to a scale of at least 20 Mpc/h. We discuss critically the agreement of this new data with current theoretical models.
+ 					</p>
+				</div>
+			</div>
+			
+		</section>
+
+		<!-- FOOTER -->
+		<div class="dotted-line"></div>
+		<div class="big-buttons wifi-button">
+			<a href="#">
+				Free WiFi !
+				<img src="img/wifi_symbol.png" alt="">
+			</a>
+		</div>
+		
+		<footer class="footer">
+			<ul>
+				<li><a href="about.html">About</a></li> |
+				<li><a href="contact.html">Contact</a></li> |
+				<li><a href="terms.html">Terms & Conditions</a></li> |
+				<li><a href="privacy.html">Privacy</a></li> |
+				<li><a href="accessibility.html">Accessibility</a></li> |
+				<li><a href="faq.html">FAQs</a></li> |
+				<li><a href="joinus.html">Join Us</a></li>
+			</ul>
+		</footer>
+
+	</div>
+	<script> </script>
+</body>
+</html>
