@@ -1,0 +1,72 @@
+! CHANGE home image to link to home page ! (means changing every page)
+- rename to Radical Fracticals??
+✓ background animation is jagged on non-home pages!
+✓ Update template when we know it's all good
+- (maybe build a fractal generator and add that to nav sooo)
+
+-------------------------------------------
+
+✓ animate background slightly to make it unnerving
+✓ find a better font / fonts
+✓ make title and caption an image
+✓ add a button besides the search bar
+✓ add book now button above search bar
+✓ add little arrows to slideshow and the circles
+✓ add disclaimer to 25% off offer (and add more styling)
+   stating offer is not valid with fractals of non-integer dimension
+
+-------------------------------------------
+
+✓ create a form for the booking page
+- use a dropdown list for the locations
+✓ preview at right side with booking info
+✓ form validation and input fields WOOOOOOOOOOO
+
+-------------------------------------------
+
+✓ locations try using google maps??
+✓ but what to make it search for...
+- link to booking page and pre-fill location input field can we do that??
+
+-------------------------------------------
+
+✓ go from https://www.harvester.co.uk/mainmenu don't do the menu tiles I don't want to make 15 pages
+- animated drop-down lists of menu items
+- use js objects to hold menu
+- and generate menu lists automatically
+
+-------------------------------------------
+
+✓- kids page is just creepy and implies they will be consumed to fuel the creation of more fractals
+
+-------------------------------------------
+
+- gift card page can be more form validation, if you want it to be
+
+-------------------------------------------
+
+✓ offers as tiles
+✓ make 9 why not
+✓ ooh make text fade in
+
+-------------------------------------------
+
+✓ finish editing terms page
+
+-------------------------------------------
+
+## pages:
+✓ about
+✓ accessibility
+✓ book
+✓ contact
+✓ faq
+✓ joinus
+✓ locations
+✓ privacy
+✓ giftcards
+✓ takeaway
+✓ template
+✓ signup
+✓ terms
+✓ offers
