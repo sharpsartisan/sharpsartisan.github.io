@@ -27,10 +27,6 @@ body {
     color: var(--text);
 }
 
-p {
-    font-family: sans-serif;
-}
-
 .site-container {
     max-width: 1000px;
     min-height: 100vh;
@@ -170,6 +166,7 @@ p {
 }
 
 .modal-content p {
+    font-family: sans-serif;
     margin-bottom: 20px;
 }
 

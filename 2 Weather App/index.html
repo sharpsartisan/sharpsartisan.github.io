@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles.css">
+    <title>WHAT'S UP, WEATHERBOY</title>
+</head>
+<body>
+    
+    <div class="top-banner">
+        <h4>Forecast</h4>
+        <div class="search-info">
+            <span class="search-icon">ⓘ</span>
+            <span class="search-tooltip">to specify a location, use the country code, e.g "Paris, US"</span>
+        </div>
+        <input type="text" class="search" placeholder="Search">
+    </div>
+
+    <!-- js loads the weather, daily forecast, and day detail HMTL here -->
+    <div class="weather-container">
+    </div>
+
+    <h2 class="daily">Daily</h2>
+    <div class="forecast-container"></div>
+
+    <h2 class="day-details">Day Details</h2>
+    <div class="detail-container">
+        <div class="detail day">
+            <h4>Day</h4>
+            <p>it's gonna rain. the high will be</p>
+            <h4>Night</h4>
+            <p>tonight will be rainy. the low will be</p>
+        </div>
+
+        <div class="detail sunrise">
+            <h4>Sunrise</h4>
+            <p>06:41</p>
+            <h4>Sunset</h4>
+            <p>18:02</p>
+        </div>
+
+        <div class="detail moonrise">
+            <h4>Moonrise</h4>
+            <p>17:11</p>
+            <h4>Moonset</h4>
+            <p>07:20</p>
+        </div>
+
+        <div class="detail graphs">
+            <h4>Precipitation</h4>
+            <div class="chart">
+               
+            </div>
+            <h4>Humidity</h4>
+            <h4>UV Index</h4>
+            <h4>Max. Wind</h4>
+        </div>
+    </div>
+
+    <!-- js HTML area done -->
+    <script src="./app.js"></script>
+</body>
+</html>

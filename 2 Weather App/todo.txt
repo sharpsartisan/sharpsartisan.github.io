@@ -1,0 +1,57 @@
+# TASK: add nightttime background images 
+
+# TASK: ADD SECTIONS BELOW WEATHER GRAPH
+- use flexbox for sure!
+- day/night make use of the high/low data given
+- sunrise sunset straightforward: use sun icon with up/down arrow symbol
+- not sure if moonrise data is given so look
+! precip / humid / uv / wind are all circle graphs? (own task)
+- last two are historical and I don't have API access for those
+
+# TASK: CREATE THE CIRCLE GRAPHS
+- find out how one might do this
+- and then create a plan
+
+# OPTIONAL TASK: CREATE WEATHER GRAPH
+- use charts.css??
+- high-tier task big brain addition
+- figure out how to even begin
+
+
+weather types:
+
+ID = xxx
+
+2xx thunderstorm
+3xx drizzle
+5xx rain
+6xx snow
+7xx atmosphere
+800 clear
+80x clouds
+
+COMPLETED:
+
+# TASK: ICONS 
+- find list of weather outputs (eg 'mostly cloudy' and 'sunny')
+to match the icons to
+- change icon names to match the list
+- update icon when weather is updated
+
+# TASK: BACKGROUND
+- search and compile a set of images for each weather type for bg 
+- edit all to same dimensions
+- update with icon name updates
+- background should scroll at a different speed to regular scroll
+
+# TASK: ADD SEARCH FUNCTIONALITY
+- see if the API can provide any help
+- find out how the API likes names written
+- get a list to use for search?
+- on clicking a result the weather updates
+
+# TASK: ADD 5-DAY FORECAST
+- get the info from the API
+- construct the html 
+- do the styling
+- loop thru each day and add all the info and images in an innerHTML
