@@ -50,6 +50,7 @@ async function updateWeather(url) {
         </p>
     `
     document.body.style.backgroundImage = `url('./img/${weather[0].icon}.jpg')`;
+    updateDetails(main, sys, weather, wind)
 }
 
 async function updateFiveDayForecast(url) {
@@ -106,9 +107,117 @@ function changeLocation(arg1, arg2 = null) {
     updateFiveDayForecast(urlFiveDay);
 }
 
+function updateDetails(main, sys, weather, wind) {
+    const details = document.querySelectorAll('.detail');
 
-//search functionality, placename and (optionally) country or state code
+    // day and night
+    const dayNight = details[0].querySelectorAll('p');
+    dayNight[0].innerHTML = `The high will be ${Math.round(main.temp_max)}°.`;
+    dayNight[1].innerHTML = `The low will be ${Math.round(main.temp_min)}°.`;
+
+    //sunrise and sunset
+    // * 1000 to convert from seconds to milliseconds, then slice just the hours/mins
+    const sunDetails = details[1].querySelectorAll('p');
+    const sunRise = new Date(sys.sunrise*1000).toTimeString().slice(0, 5);
+    const sunSet = new Date(sys.sunset*1000).toTimeString().slice(0, 5);
+    sunDetails[0].innerHTML = `${sunRise}`;
+    sunDetails[1].innerHTML = `${sunSet}`;
+
+    // moonrise and moonset
+    const moonRiseSet = details[2].querySelectorAll('p');
+    moonRiseSet[0].innerHTML = `${16}`;
+    moonRiseSet[1].innerHTML = `${26}`;
+
+    // circle graph dummy data
+    const precip = 80;
+    const UV = 1;
+    // iterates over canvasses
+    const graphData = [precip, main.humidity, UV, wind];  
+
+    for (i = 0; i < graphData.length; i++) {
+        drawCharts(graphData[i], i);
+    }
+}
+
+// gets called from updateWeather
+// uses Chart.js, gets called from updateDetails
+function drawCharts(graphData, p) {
+
+    const ctx = document.getElementById(`${p}`);
+
+    const text = document.querySelectorAll('.graph > p')[p];
+    // draws the wind graph
+    if (typeof graphData === 'object') {
+        text.innerHTML = `${graphData.speed} km/h`;
+
+        new Chart(ctx, {
+            type: 'doughnut',
+    
+            options: {
+                cutout: '80%',
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        enabled: false
+                    }
+                },
+            },
+    
+            data: {
+                datasets: [{
+                    backgroundColor: ['rgb(20,220,255)', 'rgb(126,138,143)'],
+                    data: [graphData, 100 - graphData],
+                    borderWidth: 0,
+                }]
+            }
+        })
+    }
+
+    // draws the other graphs
+    else {
+        if (p === 2) text.innerHTML = `${graphData} (Low)`; 
+        else text.innerHTML = `${graphData}%`;
+
+        new Chart(ctx, {
+            type: 'doughnut',
+    
+            options: {
+                cutout: '80%',
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        enabled: false
+                    }
+                },
+            },
+    
+            data: {
+                datasets: [{
+                    backgroundColor: ['rgb(20,220,255)', 'rgb(126,138,143)'],
+                    data: [graphData, 100 - graphData],
+                    borderWidth: 0,
+                }]
+            }
+        })
+    }
+
+}
+
+// makes the info icon clickable for mobile
+const icon = document.querySelector('.search-icon');
+const tooltip = document.querySelector('.search-tooltip');
+icon.onclick = () => {
+    tooltip.classList.toggle('hidden');
+}
+
+// search functionality, placename and (optionally) country or state code
 const search = document.querySelector('.search')
+// clears input box when page refreshes
+search.value = '';
 search.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
         const searchText = search.value;
@@ -121,4 +230,15 @@ search.addEventListener('keydown', (e) => {
     }
 });
 
+// opens and closes the 'about' modal
+const modal = document.getElementById('about-modal');
+const btn = document.getElementById('about');
+const closeIcon = document.getElementById('about-close');
+// click on close or anywhere outside the modal to close it
+btn.onclick = () => modal.style.display = 'block';
+closeIcon.onclick = () => modal.style.display = 'none';
+window.onclick = (e) => {if (e.target === modal) modal.style.display = 'none';}
+
+
+// default location
 changeLocation('London','GB');
