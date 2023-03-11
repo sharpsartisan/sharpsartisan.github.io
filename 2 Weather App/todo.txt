@@ -1,0 +1,90 @@
+# TASK: AESTHETICS
+- add X and search icon to search bar
+
+# TASKS: MISC
+- see if API gives moon phase info
+- add visibility to main weather bit
+- see if API has pressure and add that to main weather bit too
+- make footer links open in new tab
+- make day / night info verbose
+- top banner is on top of loading screen D:
+- rewrite onclicks to be event listeners (google says they're better)
+
+# TASKS: LOCAL TIME
+- make sunrise (and other times) in correct timezone for plcae
+
+ADD PROJECT TO WEBSITE!!
+DEAL WITH API TOKEN THING
+
+# TASK: CREATE THE CIRCLE GRAPHS
+- find out how to refresh the charts after choosing a new city!
+
+# TASK: CREATE WEATHER GRAPHS
+- make labels have degree symbol on them (warning: unreasonably difficult)
+
+
+weather types:
+ID = xxx
+
+2xx thunderstorm
+3xx drizzle
+5xx rain
+6xx snow
+7xx atmosphere
+800 clear
+80x clouds
+
+COMPLETED:
+# TASKS: MISC
+- make sticky header
+
+# TASK: CREATE THE CIRCLE GRAPHS
+- find out about relevant API data
+- plan out how to nicely loop thru canvasses to update them
+- add footer info about chart.js?
+
+# TASK: AESTHETICS
+- add sun mon rise set icons
+- make footer info flex or something
+- stop search bar focus white border!
+- make search bar wider?? 
+- make info icon clickable for mobile
+- add nightttime background images
+- thin scrollbars!
+
+# TASK: ICONS 
+- find list of weather outputs (eg 'mostly cloudy' and 'sunny')
+to match the icons to
+- change icon names to match the list
+- update icon when weather is updated
+
+# TASK: BACKGROUND
+- search and compile a set of images for each weather type for bg 
+- edit all to same dimensions
+- update with icon name updates
+- background should scroll at a different speed to regular scroll
+
+# TASK: ADD SEARCH FUNCTIONALITY
+- see if the API can provide any help
+- find out how the API likes names written
+- get a list to use for search?
+- on clicking a result the weather updates
+
+# TASK: ADD 5-DAY FORECAST
+- get the info from the API
+- construct the html 
+- do the styling
+- loop thru each day and add all the info and images in an innerHTML
+
+# TASK: ADD SECTIONS BELOW WEATHER GRAPH
+- use flexbox for sure!
+- day/night make use of the high/low data given
+- sunrise sunset straightforward: use sun icon with up/down arrow symbol
+- not sure if moonrise data is given so look
+! precip / humid / uv / wind are all circle graphs? (own task)
+- last two are historical and I don't have API access for those
+
+# TASK: CREATE THE CIRCLE GRAPHS
+- find out about relevant API data
+- plan out how to nicely loop thru canvasses to update them
+- add footer info about chart.js?

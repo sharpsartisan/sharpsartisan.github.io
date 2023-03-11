@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles.css">
+    <title>WHAT'S UP, WEATHERBOY</title>
+</head>
+<body>
+    <div class="loading"></div>
+
+    <main class="mega-container">
+        <!-- sticky header and search bar -->
+        <div class="top-banner">
+            <h4>Forecast</h4>
+            <div class="search-info">
+                <span class="search-icon">ⓘ</span>
+                <span class="search-tooltip hidden">to specify a location, use the country code, e.g "Paris, US"</span>
+            </div>
+            <input type="text" class="search" placeholder="Search">
+        </div>
+    
+        <!-- main weather box -->
+        <div class="weather-container"></div>
+    
+        <!-- 5 day forecast -->
+        <h2 class="daily">Daily</h2>
+        <div class="forecast-container">
+            <div id="f0" class="forecast"></div>
+            <div id="f8" class="forecast"></div>
+            <div id="f16" class="forecast"></div>
+            <div id="f24" class="forecast"></div>
+            <div id="f32" class="forecast"></div>
+        </div>
+        
+        <!-- graph for each 5-day -->
+        <div class="hourly-wrapper">
+            <h2 class="hourly">Hourly</h2>
+            <button class="hourly-details">Details</button>
+            <button class="hourly-summary">Summary</button>
+        </div>
+            <div class="hourly-graph">
+                <canvas id="4"></canvas>
+            </div>
+
+        <!-- detail boxes -->
+        <h2 class="day-details">Day Details</h2>
+        <div class="detail-container">
+            <div class="detail day">
+                <h4>Day</h4>
+                <p>it's gonna rain. the high will be</p>
+                <h4>Night</h4>
+                <p>tonight will be rainy. the low will be</p>
+            </div>
+    
+            <div class="detail sunrise">
+                <h4>Sunrise</h4>
+                <img src="./img/_sunrise.png" alt="sunrise icon">
+                <p>06:41</p>
+                <h4>Sunset</h4>
+                <img src="./img/_sunset.png" alt="sunset icon">
+                <p>18:02</p>
+            </div>
+    
+            <div class="detail moonrise">
+                <h4>Moonrise</h4>
+                <img src="./img/_moonrise.png" alt="moonrise icon">
+                <p>17:11</p>
+                <h4>Moonset</h4>
+                <img src="./img/_moonset.png" alt="moonset icon">
+                <p>07:20</p>
+            </div>
+    
+            <div class="detail graph-container-all">
+                <div class="graph-container">
+                    <h4>Precipitation</h4>
+                    <div class="graph precip">
+                        <p>80%</p>
+                        <canvas id="0"></canvas>
+                    </div>
+                </div>
+                <div class="graph-container">
+                    <h4>Humidity</h4>
+                    <div class="graph humidity">
+                        <p>89%</p>
+                        <canvas id="1"></canvas>
+                    </div>
+                </div>
+                <div class="graph-container">
+                    <h4>UV Index</h4>
+                    <div class="graph uv">
+                        <p>2</p>
+                        <!-- <p>Low</p> -->
+                        <canvas id="2"></canvas>
+                    </div>
+                </div>
+                <div class="graph-container">
+                    <h4>Max. Wind</h4>
+                    <div class="graph wind">
+                        <p>21</p>
+                        <!-- <p>km/h</p> -->
+                        <canvas id="3"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- js HTML area done -->
+        <!-- 'about' modal -->
+        <div id="about-modal" class="modal">
+            <div class="modal-content">
+                <span id="about-close" class="close">✖</span>
+                <p>This project is an attempt to clone the Weather app for Windows.
+                    Some data couldn't be replicated through limitations of the OpenWeather API,
+                    but I was able to create a fairly accurate repesentation of the main page.
+                </p>
+                <p>Some of the skills this project taught me were:
+                    <ul>
+                        <li>How to work with an API</li>
+                        <li>Fetch requests and working with async / await</li>
+                        <li>Creating a responsive site for both desktop and mobile devices</li>
+                        <li>Working with external javascript libraries (Chart.js)</li>
+                        <li>Manipulating date and time strings</li>
+                        <li>Using CSS Flexbox</li>
+                        <li>Writing modular, readable javascript</li>
+                        <li>Organising HTML and div grouping</li>
+                        <li>Tracking changes and branches using Git</li>
+                    </ul>
+                </p>
+                <p>Less 'official' skills I learned include:
+                    <ul>
+                        <li>Googling dozens of stackoverflow answers</li>
+                        <li>Writing a bunch of terrible code and immediately deleting it</li>
+                        <li>Continuing in the face of insurmountable odds</li>
+                        <li>Back stretches</li>
+                    </ul>
+                </p>
+                <p>Despite being a single page site, I was really pushed outside my comfort zone
+                    when it came to working with the API and keeping track of my code as the html, css, and js
+                    files all started to grow.
+                </p>
+                <p>I feel much more confident in all the areas in the list
+                    and I believe this project really helped build my skills and understanding
+                    of front-end development.
+                </p>
+            </div>
+        </div>
+    </main>
+
+
+    <footer>
+        <span>Built using the 
+            <a href="https://openweathermap.org/api">OpenWeather API</a> and
+            <a href="https://www.chartjs.org/"> Chart.js</a>
+        </span>
+        <span>
+            Icons made by 
+                <a href="https://www.flaticon.com/authors/komar-dews" title="Komar Dews">Komar Dews</a> 
+                and <a href="https://www.flaticon.com/authors/icon-hubs" title="Icon Hubs">Icon Hubs</a> 
+                from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+            
+        </span>
+        <span>
+            <a href="#" id="about">about</a>
+        </span>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="./app.js"></script>
+</body>
+</html>
