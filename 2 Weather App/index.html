@@ -8,6 +8,8 @@
     <title>WHAT'S UP, WEATHERBOY</title>
 </head>
 <body>
+    <div class="loading"></div>
+
     <main class="mega-container">
         <!-- sticky header and search bar -->
         <div class="top-banner">
@@ -19,13 +21,30 @@
             <input type="text" class="search" placeholder="Search">
         </div>
     
-        <!-- js loads the weather, daily forecast, and day detail HMTL here -->
-        <div class="weather-container">
-        </div>
+        <!-- main weather box -->
+        <div class="weather-container"></div>
     
+        <!-- 5 day forecast -->
         <h2 class="daily">Daily</h2>
-        <div class="forecast-container"></div>
-    
+        <div class="forecast-container">
+            <div id="f0" class="forecast"></div>
+            <div id="f8" class="forecast"></div>
+            <div id="f16" class="forecast"></div>
+            <div id="f24" class="forecast"></div>
+            <div id="f32" class="forecast"></div>
+        </div>
+        
+        <!-- graph for each 5-day -->
+        <div class="hourly-wrapper">
+            <h2 class="hourly">Hourly</h2>
+            <button class="hourly-details">Details</button>
+            <button class="hourly-summary">Summary</button>
+        </div>
+            <div class="hourly-graph">
+                <canvas id="4"></canvas>
+            </div>
+
+        <!-- detail boxes -->
         <h2 class="day-details">Day Details</h2>
         <div class="detail-container">
             <div class="detail day">
@@ -146,6 +165,7 @@
         </span>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="./app.js"></script>
 </body>
 </html>

@@ -5,6 +5,12 @@
 - see if API gives moon phase info
 - add visibility to main weather bit
 - see if API has pressure and add that to main weather bit too
+- make footer links open in new tab
+- make day / night info verbose
+- top banner is on top of loading screen D:
+
+# TASKS: LOCAL TIME
+- make sunrise (and other times) in correct timezone for plcae
 
 ADD PROJECT TO WEBSITE!!
 DEAL WITH API TOKEN THING
@@ -12,8 +18,9 @@ DEAL WITH API TOKEN THING
 # TASK: CREATE THE CIRCLE GRAPHS
 - find out how to refresh the charts after choosing a new city!
 
-# OPTIONAL TASK: CREATE WEATHER GRAPHS
-- busy with the other tasks rn ask me later
+# TASK: CREATE WEATHER GRAPHS
+- make labels have degree symbol on them (warning: unreasonably difficult)
+
 
 weather types:
 ID = xxx
