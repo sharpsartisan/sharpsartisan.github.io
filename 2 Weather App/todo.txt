@@ -8,6 +8,7 @@
 - make footer links open in new tab
 - make day / night info verbose
 - top banner is on top of loading screen D:
+- rewrite onclicks to be event listeners (google says they're better)
 
 # TASKS: LOCAL TIME
 - make sunrise (and other times) in correct timezone for plcae
