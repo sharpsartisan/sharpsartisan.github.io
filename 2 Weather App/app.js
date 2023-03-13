@@ -57,8 +57,10 @@ function changeLocation(arg1, arg2 = null) {
 
 async function updateWeather(url) {
     //ask API for the current weather
-    const {main, name, sys, weather, wind} = await this.fetchWeather(url);
+    const {main, name, sys, weather, wind, timezone, visibility} = await this.fetchWeather(url);
     if (!main) return;
+
+    let GMT = ("+" + (timezone / 3600)).slice(-2);
 
     // easier than making and assigning 100 variables, but every time the html changes, this has to change too
     const weatherHTML = document.querySelector('.weather-container');
@@ -72,13 +74,17 @@ async function updateWeather(url) {
 
         <h4 class="weather-desc">${weather[0].main}</h4>
         <p class="weather-caption">
-            <span class="w-feels">feels like ${Math.round(main.feels_like)}°</span>
-            <span class="w-wind">wind ${wind.speed} km/h</span>
-            <span class="w-humidity">humidity ${main.humidity}%</span>
+            <span class="w-feels">Feels like ${Math.round(main.feels_like)}°</span>
+            <span class="w-wind">Wind ${Math.round(wind.speed)} km/h</span>
+            <span class="w-vis">Visibility ${Math.round(visibility / 1000)}km</span>
+        </p>
+        <p class="weather-caption">
+            <span class="w-pressure">Barometer ${main.pressure}mb</span>
+            <span class="w-humidity">Humidity ${main.humidity}%</span>
+            <span class="w-zone">Timezone ${GMT} GMT </span>
         </p>
     `
     document.body.style.backgroundImage = `url('./img/${weather[0].icon}.jpg')`;
-    updateDetails(main, sys, weather, wind)
 }
 
 async function updateFiveDayForecast(url) {
@@ -88,20 +94,25 @@ async function updateFiveDayForecast(url) {
 
     // global variable so it can be accessed anytime
     DATA = data.list;
+    DATA.push(data.city);
     
     const forecast = document.querySelector('.forecast-container');
     forecast.innerHTML = '';
 
     // API returns forecast in 40 3-hour chunks, hence i +=8 to increase by day
-    for (let i = 0; i < data.list.length; i += 8) {
+    for (let i = 0; i < data.list.length - 1; i += 8) {
         // turn the full date into a data string like 'Mon Mar 27 2020' and split it 
         const d = new Date(data.list[i].dt_txt).toDateString().split(' ');
         // keeping only 'Mon 27'
         const dateDay = d[0] + ' ' + d[2];
+        const { description, icon } = DATA[i].weather[0]; 
 
-        // get rest of the data from API add chunks of html
-        const { temp_max, temp_min } = data.list[i].main;
-        const { description, icon } = data.list[i].weather[0]; 
+        let { temp_max, temp_min } = DATA[i].main;
+        for (let j = 0; j < 8; j++) {
+            if (DATA[i + j].main.temp_max > temp_max) temp_max = DATA[i + j].main.temp_max
+            if (DATA[i + j].main.temp_min < temp_min) temp_min = DATA[i + j].main.temp_min
+        }
+
 
         forecast.innerHTML += `
             <div class="forecast" id="f${i}">
@@ -115,38 +126,56 @@ async function updateFiveDayForecast(url) {
             </div>
         `
     }
-
+    
     // adds clicking on daily forecasts updates graph for that day
     const forecasts = document.querySelectorAll('.forecast');
     forecasts.forEach((forecast) => {
         const ID = parseInt(forecast.id.slice(1));
-        forecast.onclick = () => drawHourlyChart(ID);
+        forecast.addEventListener('click', () => {
+            updateDetails(ID);
+            drawHourlyChart(ID);
+        });
     })
-
+    
+    // default chart and details are for the first day
+    updateDetails(0)
     drawHourlyChart(0);
 }
 
 // gets called from updateWeather
-function updateDetails(main, sys, weather, wind) {
+// SHOULD GET CALLED FROM 5-DAY SO IT UPDATES FOR EVERY DAY
+function updateDetails(ID) {
     const details = document.querySelectorAll('.detail');
 
-    // day and night
-    const dayNight = details[0].querySelectorAll('p');
-    dayNight[0].innerHTML = `The high will be ${Math.round(main.temp_max)}°.`;
-    dayNight[1].innerHTML = `The low will be ${Math.round(main.temp_min)}°.`;
+    const main = DATA[ID].main;
+    const wind = DATA[ID].wind;
+
+    // highs and lows - figuring out WHEN it is day or night with the data is a headache
+    const dayNight = document.querySelectorAll('.detail')[0].querySelectorAll('p');
+
+    let { temp_max, temp_min } = DATA[ID].main;
+    for (let i = 0; i < 8; i++) {
+        if (DATA[ID + i].main.temp_max > temp_max) temp_max = DATA[ID + i].main.temp_max
+        if (DATA[ID + i].main.temp_min < temp_min) temp_min = DATA[ID + i].main.temp_min
+    }
+
+    dayNight[0].innerHTML = `The high will be ${Math.round(temp_max)}°.`;
+    dayNight[1].innerHTML = `The low will be ${Math.round(temp_min)}°.`;
 
     //sunrise and sunset
     // * 1000 to convert from seconds to milliseconds, then slice just the hours/mins
     const sunDetails = details[1].querySelectorAll('p');
-    const sunRise = new Date(sys.sunrise*1000).toTimeString().slice(0, 5);
-    const sunSet = new Date(sys.sunset*1000).toTimeString().slice(0, 5);
+    const timezone = DATA[DATA.length-1].timezone;
+    const sunRise = new Date((DATA[DATA.length-1].sunrise + timezone)*1000).toTimeString().slice(0, 5);
+    const sunSet = new Date((DATA[DATA.length-1].sunset + timezone)*1000).toTimeString().slice(0, 5);
     sunDetails[0].innerHTML = `${sunRise}`;
     sunDetails[1].innerHTML = `${sunSet}`;
 
     // moonrise and moonset
+    // API doesn't give this data... sooo
     const moonRiseSet = details[2].querySelectorAll('p');
-    moonRiseSet[0].innerHTML = `${16}`;
-    moonRiseSet[1].innerHTML = `${26}`;
+    moonRiseSet[0].innerHTML = `22:12`;
+    moonRiseSet[1].innerHTML = `06:42`;
 
     // circle graph dummy data
     const precip = 80;
@@ -232,10 +261,9 @@ function drawCircleCharts(graphData, p) {
 // uses Chart.js, gets called from updateFiveDayForecast
 // or by clicking on a daily forecast
 function drawHourlyChart(ID) {
-    console.log('hi');
-
     const ctx = document.getElementById('4');
     const hourlyData = [];
+    const timezone = DATA[DATA.length-1].timezone;
 
     for (let i = ID; i < ID + 8; i++) {
         let temp = Math.round(DATA[i].main.temp);
@@ -243,16 +271,15 @@ function drawHourlyChart(ID) {
     }
     
     for (let i = 0; i < 8; i++) {
-        let time = DATA[i].dt_txt.slice(-8, -3);
+        let time = new Date((DATA[i].dt + timezone)*1000).toTimeString().slice(0, 5);;
         hourlyData.push(time)
     }
+
+    // (DATA[DATA.length-1].sunset + timezone)*1000).toTimeString().slice(0, 5);
 
     const hourlyLabels = hourlyData.slice(0, 8).map((n) => {
         return n.toString() + '°';
     })
-
-    console.log(hourlyData)
-    console.log(hourlyLabels)
 
     const yMin = Math.min(...hourlyData.slice(0, 8)) - 2;
     const yMax = Math.max(...hourlyData.slice(0, 8)) + 1;
@@ -317,9 +344,7 @@ window.addEventListener('DOMContentLoaded', (e) => {
     // makes the info icon clickable for mobile
     const icon = document.querySelector('.search-icon');
     const tooltip = document.querySelector('.search-tooltip');
-    icon.onclick = () => {
-        tooltip.classList.toggle('hidden');
-    }
+    icon.addEventListener('click', () => tooltip.classList.toggle('hidden'));
 
     // search functionality, placename and (optionally) country or state code
     const search = document.querySelector('.search')
@@ -338,13 +363,14 @@ window.addEventListener('DOMContentLoaded', (e) => {
     });
 
     // opens and closes the 'about' modal
+    // click on close or anywhere outside the modal to close it
     const modal = document.getElementById('about-modal');
     const btn = document.getElementById('about');
     const closeIcon = document.getElementById('about-close');
-    // click on close or anywhere outside the modal to close it
-    btn.onclick = () => modal.style.display = 'block';
-    closeIcon.onclick = () => modal.style.display = 'none';
-    window.onclick = (e) => {if (e.target === modal) modal.style.display = 'none';}
+
+    btn.addEventListener('click', () => modal.style.display = 'block')
+    closeIcon.addEventListener('click', () => modal.style.display = 'none')
+    window.addEventListener('click', (e) => {if (e.target === modal) modal.style.display = 'none'})
 
     // loads default location
     changeLocation('London','GB');
