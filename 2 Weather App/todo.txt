@@ -26,6 +26,14 @@ ID = xxx
 80x clouds
 
 COMPLETED:
+
+# TASK: MAKE THE SEARCH WORK
+- find a list of cities that isn't too big
+- make importing modules work why doesn't it work 
+- make search return first 5 results that match anywhere in the search text
+- make the results show up and look nice
+- pressing up and down keys highlights results
+
 # TASKS: MISC
 - see if API gives moon phase info (it does not)
 - make day / night info verbose (task cancelled, surprisingly hard)

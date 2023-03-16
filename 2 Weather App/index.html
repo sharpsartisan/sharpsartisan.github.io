@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./styles.css">
+    <link rel="icon" href="./favicon.ico">
     <title>WHAT'S UP, WEATHERBOY</title>
 </head>
 <body>
@@ -18,7 +19,11 @@
                 <span class="search-icon">ⓘ</span>
                 <span class="search-tooltip hidden">to specify a location, use the country code, e.g "Paris, US"</span>
             </div>
-            <input type="text" class="search" placeholder="Search">
+            <form autocomplete="off" action="">
+                <div class="autocomplete">
+                    <input id="search" type="text" placeholder="Search">
+                </div>
+            </form>
         </div>
     
         <!-- main weather box -->
@@ -56,19 +61,19 @@
     
             <div class="detail sunrise">
                 <h4>Sunrise</h4>
-                <img src="./img/_sunrise.png" alt="sunrise icon">
+                <img src="./img/sunrise.png" alt="sunrise icon">
                 <p>06:41</p>
                 <h4>Sunset</h4>
-                <img src="./img/_sunset.png" alt="sunset icon">
+                <img src="./img/sunset.png" alt="sunset icon">
                 <p>18:02</p>
             </div>
     
             <div class="detail moonrise">
                 <h4>Moonrise</h4>
-                <img src="./img/_moonrise.png" alt="moonrise icon">
+                <img src="./img/moonrise.png" alt="moonrise icon">
                 <p>17:11</p>
                 <h4>Moonset</h4>
-                <img src="./img/_moonset.png" alt="moonset icon">
+                <img src="./img/moonset.png" alt="moonset icon">
                 <p>07:20</p>
             </div>
     
@@ -164,6 +169,6 @@
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
-    <script src="./app.js"></script>
+    <script type="module" src="./app.js"></script>
 </body>
 </html>

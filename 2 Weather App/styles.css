@@ -8,6 +8,10 @@ html {
     scrollbar-width: thin;
 }
 
+a {
+    color: #3181be;
+}
+
 body {
     background-color: #6e8ba1;
     color: white;
@@ -43,19 +47,18 @@ body {
     padding: 6px;
 }
 
-.search {
-    width: 36%;
+#search {
     padding: 8px;
     border: none;
     border-radius: 4px;
     background-color: #47525e;
 }
 
-.search:focus {
+#search:focus {
     outline: none;
 }
 
-.search::placeholder {
+#search::placeholder {
     color: white;
 }
 
@@ -89,6 +92,32 @@ body {
 
 .search-tooltip::after {
     content: '';
+}
+
+.autocomplete {
+    position: relative;
+}
+
+.auto-items {
+    position: absolute;
+    background-color: #242b31;
+    cursor: pointer;
+    top: 96%;
+    width: 100%;
+    font-style: italic;
+}
+
+.auto-items div {
+    padding: 10px;
+    border-top: none;
+}
+
+.auto-items div:hover {
+    background-color: #4380ae;
+}
+
+.auto-active {
+    background-color: #3181be;
 }
 
 .top-banner h4 {
@@ -163,7 +192,7 @@ body {
 }
 
 .forecast:hover {
-    border: 2px solid lightgrey;
+    border: 2px solid #eee;
 }
 
 .forecast img {
@@ -300,6 +329,7 @@ body {
     margin: auto;
     padding: 30px;
     width: 80%;
+    max-width: 600px;
     border-radius: 4px;
 }
 

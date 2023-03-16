@@ -1,5 +1,3 @@
-// api key is b984a0e53a91bb44a82f7bbf270aa6cc
-
 // window.addEventListener('load', () => {
 //     // asks for precise geolocation, if denied shows London
 //     navigator.geolocation.getCurrentPosition(
@@ -18,6 +16,11 @@
 
 // fetches that data, babey!
 
+import COUNTRIES from './countries.js';
+import ISO from './iso.js';
+
+const API = 'b984a0e53a91bb44a82f7bbf270aa6cc';
+
 // for Chart.js datalabels plugin
 Chart.register(ChartDataLabels)
 
@@ -27,29 +30,38 @@ let CHARTS = new Array(5);
 
 async function fetchWeather(url) {
     return fetch(url)
-        .then (response => response.json())
-        .then (JSONdata => {
+        .then(response => response.json())
+        .then(JSONdata => {
             console.log('...API data received!')
             console.log(JSONdata);
             return JSONdata;
         })
+        .catch(err => {
+            console.error('API data NOT received: ', err);
+        })
 }
 
 function changeLocation(arg1, arg2 = null) {
-    //performs an API request based either on (city,country code), or (latitude,longitude)
+    //performs an API request based either on (city), (city,country code), or (latitude,longitude)
     // e.g 'London','GB' or '0.23432424','-2.353645' 
+    let urlWeather, urlFiveDay;
+
     if (typeof(arg1) === 'string') {
-        urlWeather = `https://api.openweathermap.org/data/2.5/weather?q=${arg1},${arg2}&units=metric&appid=b984a0e53a91bb44a82f7bbf270aa6cc`;
-        urlFiveDay = `https://api.openweathermap.org/data/2.5/forecast?q=${arg1},${arg2}&units=metric&appid=b984a0e53a91bb44a82f7bbf270aa6cc`;
+        if (arg2) {
+            urlWeather = `https://api.openweathermap.org/data/2.5/weather?q=${arg1},${arg2}&units=metric&appid=${API}`;
+            urlFiveDay = `https://api.openweathermap.org/data/2.5/forecast?q=${arg1},${arg2}&units=metric&appid=${API}`;
+        }
+        else  {
+            urlWeather = `https://api.openweathermap.org/data/2.5/weather?q=${arg1}&units=metric&appid=${API}`;
+            urlFiveDay = `https://api.openweathermap.org/data/2.5/forecast?q=${arg1}&units=metric&appid=${API}`;
+        }
     }
-        
     else if (typeof(arg1) === 'number' && typeof(arg2) === 'number') {
-        urlWeather = `https://api.openweathermap.org/data/2.5/weather?lat=${arg1}&lon=${arg2}&units=metric&appid=b984a0e53a91bb44a82f7bbf270aa6cc`;
-        urlFiveDay = `https://api.openweathermap.org/data/2.5/forecast?lat=${arg1}&lon=${arg2}&units=metric&appid=b984a0e53a91bb44a82f7bbf270aa6cc`;
+        urlWeather = `https://api.openweathermap.org/data/2.5/weather?lat=${arg1}&lon=${arg2}&units=metric&appid=${API}`;
+        urlFiveDay = `https://api.openweathermap.org/data/2.5/forecast?lat=${arg1}&lon=${arg2}&units=metric&appid=${API}`;
 
     }
-
-    else console.log('changeLocation had bad arguments passed!\n' + arg1 + ' and ' + arg2);
+    else console.log('changeLocation had bad arguments passed!\n\'' + arg1 + '\' and \'' + arg2 +'\'');
 
     updateWeather(urlWeather);
     updateFiveDayForecast(urlFiveDay);
@@ -57,7 +69,7 @@ function changeLocation(arg1, arg2 = null) {
 
 async function updateWeather(url) {
     //ask API for the current weather
-    const {main, name, sys, weather, wind, timezone, visibility} = await this.fetchWeather(url);
+    const {main, name, sys, weather, wind, timezone, visibility} = await fetchWeather(url);
     if (!main) return;
 
     let GMT = ("+" + (timezone / 3600)).slice(-2);
@@ -89,8 +101,8 @@ async function updateWeather(url) {
 
 async function updateFiveDayForecast(url) {
     //ask API for the five day forecast
-    const data = await this.fetchWeather(url);
-    if (!data.list) return;
+    const data = await fetchWeather(url);
+    if (!data || !data.list) return;
 
     // global variable so it can be accessed anytime
     DATA = data.list;
@@ -183,7 +195,7 @@ function updateDetails(ID) {
     // iterates over canvasses
     const graphData = [precip, main.humidity, UV, wind];  
 
-    for (i = 0; i < graphData.length; i++) {
+    for (let i = 0; i < graphData.length; i++) {
         drawCircleCharts(graphData[i], i);
     }
 }
@@ -338,6 +350,127 @@ function drawHourlyChart(ID) {
     })
 }
 
+function autocomplete() {
+    const input = document.getElementById('search');
+    
+    // clears input on page refresh
+    input.value = '';
+
+    // which result we're highlighting, if any
+    let focus = -1;
+
+    // every time you type in here... things happen
+    input.addEventListener('input', function (e) {
+        closeOldList();
+        const val = this.value.toLowerCase();
+
+        // new div to contain cities
+        const containerDiv = document.createElement('div');
+        containerDiv.setAttribute('class', 'auto-items')
+        this.parentNode.appendChild(containerDiv);
+
+        
+        // searches the big countries list, returns the first 5 matches
+        let arr = [];
+        const countries = Object.keys(COUNTRIES);
+
+        search:
+        for (let i = 0; i < countries.length; i++) {
+            let cities = COUNTRIES[countries[i]];
+            for (let j = 0; j < cities.length; j++) {
+                if (cities[j].toLowerCase().includes(val)) {
+                    // add to array and update results
+                    let info = {
+                        country: Object.keys(COUNTRIES)[i],
+                        city: cities[j],
+                    }
+                    arr.push(info);
+
+                    // make each result, make it clickable
+                    const resultDiv = document.createElement('div');
+                    resultDiv.innerHTML = `${info.city}, ${info.country}`;
+                    resultDiv.addEventListener('click', (e) => {
+                        selectLocation(e.target.innerHTML);
+                        closeOldList();
+                        this.value = '';
+                    })
+
+                    containerDiv.appendChild(resultDiv);
+                    if (arr.length === 5) break search;
+                }
+            }
+        }
+    })
+
+    input.addEventListener('keydown', (e) => {
+        let results = document.querySelector('.auto-items')
+        if (results) results = results.children;
+        else return
+
+        switch (e.key) {
+            case 'Enter':
+                // prevent form submission, and if something is highlighted, click it
+                e.preventDefault();
+                if (focus >= 0 && focus < 5) results[focus].click();
+                break;
+            case 'ArrowUp':
+                focus--;
+                addFocus(results);
+                break;
+            case 'ArrowDown':
+                focus ++;
+                addFocus(results);
+                break;
+        }
+    });
+
+    // highlights results
+    function addFocus(results) {
+        // first we reset
+        [...results].forEach(r => r.classList.remove('auto-active'));
+
+        if (focus >= results.length) focus = 0;
+        else if (focus < 0) focus = results.length - 1;
+        results[focus].classList.add('auto-active');
+    }
+
+    // place gets split into [city, country]
+    function selectLocation(place) {
+        place = place.split(', ');
+
+        // replaces country name with country code for the API
+        for (let i = 0; i < Object.keys(ISO).length; i++) {
+            if (Object.values(ISO)[i] === place[1]) {
+                place[1] = Object.keys(ISO)[i];
+            }
+        }
+
+        changeLocation(place[0], place[1]);
+    }
+
+    function closeOldList() {
+        // closes the autocomplete lists!
+        const list = document.querySelector('.auto-items');
+        if (!list) return
+        else list.remove();
+    }
+
+    document.addEventListener('click', () => {
+        focus = -1;
+        closeOldList();
+    })
+}
+
+function modal() {
+    const modal = document.getElementById('about-modal');
+    const btn = document.getElementById('about');
+    const closeIcon = document.getElementById('about-close');
+
+    btn.addEventListener('click', () => modal.style.display = 'block')
+    closeIcon.addEventListener('click', () => modal.style.display = 'none')
+    window.addEventListener('click', (e) => {if (e.target === modal) modal.style.display = 'none'})
+}
+
 // adds all event listeners
 window.addEventListener('DOMContentLoaded', (e) => {
 
@@ -346,31 +479,26 @@ window.addEventListener('DOMContentLoaded', (e) => {
     const tooltip = document.querySelector('.search-tooltip');
     icon.addEventListener('click', () => tooltip.classList.toggle('hidden'));
 
-    // search functionality, placename and (optionally) country or state code
-    const search = document.querySelector('.search')
-    // clears input box when page refreshes
-    search.value = '';
-    search.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-            const searchText = search.value;
 
-            if (searchText.search(',')) {
-                console.log('hi');
-                const cityAndCode = searchText.split(',');
-                changeLocation(cityAndCode[0], cityAndCode[1]);
-            }
-        }
-    });
+    // OLD SEARCH, WE MAKE A NEW ONE
+    // search.addEventListener('keydown', (e) => {
+    //     if (e.key === 'Enter') {
+    //         const searchText = search.value;
+
+    //         if (searchText.search(',')) {
+    //             const cityAndCode = searchText.split(',');
+    //             console.log(cityAndCode)
+    //             changeLocation(cityAndCode[0], cityAndCode[1]);
+    //         }
+    //     }
+    // });
+
+    // NEW SEARCH:
+    autocomplete();
 
     // opens and closes the 'about' modal
     // click on close or anywhere outside the modal to close it
-    const modal = document.getElementById('about-modal');
-    const btn = document.getElementById('about');
-    const closeIcon = document.getElementById('about-close');
-
-    btn.addEventListener('click', () => modal.style.display = 'block')
-    closeIcon.addEventListener('click', () => modal.style.display = 'none')
-    window.addEventListener('click', (e) => {if (e.target === modal) modal.style.display = 'none'})
+    modal();    
 
     // loads default location
     changeLocation('London','GB');
