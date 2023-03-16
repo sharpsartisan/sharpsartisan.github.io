@@ -8,10 +8,13 @@ html {
     scrollbar-width: thin;
 }
 
+a {
+    color: #3181be;
+}
+
 body {
-    justify-content: center;
-    color: white;
     background-color: #6e8ba1;
+    color: white;
     font-family: 'Segoe UI', sans-serif;
     background-image: url('./img/03d.jpg');
 }
@@ -27,11 +30,12 @@ body {
 .mega-container {
     max-width: 1080px;
     margin: 0 auto;
+    padding-top: 60px;
     background-color: rgba(0, 0, 0, 0.2);
 }
 
 .top-banner {
-    position: sticky;
+    position: fixed;
     z-index: 1;
     top: 0;
     width: 100%;
@@ -43,24 +47,18 @@ body {
     padding: 6px;
 }
 
-.search-container {
-    position: relative;
-}
-
-.search {
-    width: 36%;
+#search {
     padding: 8px;
     border: none;
     border-radius: 4px;
     background-color: #47525e;
 }
 
-/* fix this */
-.search:focus {
+#search:focus {
     outline: none;
 }
 
-.search::placeholder {
+#search::placeholder {
     color: white;
 }
 
@@ -96,6 +94,32 @@ body {
     content: '';
 }
 
+.autocomplete {
+    position: relative;
+}
+
+.auto-items {
+    position: absolute;
+    background-color: #242b31;
+    cursor: pointer;
+    top: 96%;
+    width: 100%;
+    font-style: italic;
+}
+
+.auto-items div {
+    padding: 10px;
+    border-top: none;
+}
+
+.auto-items div:hover {
+    background-color: #4380ae;
+}
+
+.auto-active {
+    background-color: #3181be;
+}
+
 .top-banner h4 {
     flex: auto;
     justify-self: left;
@@ -106,7 +130,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 350px;
+    width: 400px;
     padding: 20px;
     margin: 20px auto;
     background-color: rgba(0, 50, 100, 0.3);
@@ -133,7 +157,7 @@ body {
 }
 
 .weather-caption {
-    padding: 10px;
+    padding-top: 10px;
     font-size: 12px;
 }
 
@@ -168,7 +192,7 @@ body {
 }
 
 .forecast:hover {
-    border: 2px solid lightgrey;
+    border: 2px solid #eee;
 }
 
 .forecast img {
@@ -291,13 +315,21 @@ body {
     height: 100%;
     padding: 50px 0;
     overflow: auto;
+    animation-name: fadeIn;
+    animation-duration: 0.6s;
 }
+
+@keyframes fadeIn {
+    from {opacity: 0} 
+    to {opacity: 1}
+  }
 
 .modal-content {
     background-color: #242b31;
     margin: auto;
     padding: 30px;
     width: 80%;
+    max-width: 600px;
     border-radius: 4px;
 }
 

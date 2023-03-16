@@ -2,22 +2,13 @@
 - add X and search icon to search bar
 
 # TASKS: MISC
-- see if API gives moon phase info
-- add visibility to main weather bit
-- see if API has pressure and add that to main weather bit too
 - make footer links open in new tab
-- make day / night info verbose
-- top banner is on top of loading screen D:
-- rewrite onclicks to be event listeners (google says they're better)
+- figure out why live website doesn't display .pngs
 
-# TASKS: LOCAL TIME
-- make sunrise (and other times) in correct timezone for plcae
-
-ADD PROJECT TO WEBSITE!!
 DEAL WITH API TOKEN THING
 
 # TASK: CREATE THE CIRCLE GRAPHS
-- find out how to refresh the charts after choosing a new city!
+- make wind graph work
 
 # TASK: CREATE WEATHER GRAPHS
 - make labels have degree symbol on them (warning: unreasonably difficult)
@@ -35,10 +26,29 @@ ID = xxx
 80x clouds
 
 COMPLETED:
+
+# TASK: MAKE THE SEARCH WORK
+- find a list of cities that isn't too big
+- make importing modules work why doesn't it work 
+- make search return first 5 results that match anywhere in the search text
+- make the results show up and look nice
+- pressing up and down keys highlights results
+
 # TASKS: MISC
+- see if API gives moon phase info (it does not)
+- make day / night info verbose (task cancelled, surprisingly hard)
 - make sticky header
+- top banner is on top of loading screen D:
+- make sticky header fixed (moves on mobile)
+- rewrite onclicks to be event listeners (google says they're better)
+- add visibility to main weather bit
+- see if API has pressure and add that to main weather bit too
+
+# TASKS: LOCAL TIME
+- make sunrise (and other times) in correct timezone
 
 # TASK: CREATE THE CIRCLE GRAPHS
+- find out how to refresh the charts after choosing a new city!
 - find out about relevant API data
 - plan out how to nicely loop thru canvasses to update them
 - add footer info about chart.js?

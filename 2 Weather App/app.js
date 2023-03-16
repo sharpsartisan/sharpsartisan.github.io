@@ -1,5 +1,3 @@
-// api key is b984a0e53a91bb44a82f7bbf270aa6cc
-
 // window.addEventListener('load', () => {
 //     // asks for precise geolocation, if denied shows London
 //     navigator.geolocation.getCurrentPosition(
@@ -18,6 +16,11 @@
 
 // fetches that data, babey!
 
+import COUNTRIES from './countries.js';
+import ISO from './iso.js';
+
+const API = 'b984a0e53a91bb44a82f7bbf270aa6cc';
+
 // for Chart.js datalabels plugin
 Chart.register(ChartDataLabels)
 
@@ -27,29 +30,38 @@ let CHARTS = new Array(5);
 
 async function fetchWeather(url) {
     return fetch(url)
-        .then (response => response.json())
-        .then (JSONdata => {
+        .then(response => response.json())
+        .then(JSONdata => {
             console.log('...API data received!')
             console.log(JSONdata);
             return JSONdata;
         })
+        .catch(err => {
+            console.error('API data NOT received: ', err);
+        })
 }
 
 function changeLocation(arg1, arg2 = null) {
-    //performs an API request based either on (city,country code), or (latitude,longitude)
+    //performs an API request based either on (city), (city,country code), or (latitude,longitude)
     // e.g 'London','GB' or '0.23432424','-2.353645' 
+    let urlWeather, urlFiveDay;
+
     if (typeof(arg1) === 'string') {
-        urlWeather = `https://api.openweathermap.org/data/2.5/weather?q=${arg1},${arg2}&units=metric&appid=b984a0e53a91bb44a82f7bbf270aa6cc`;
-        urlFiveDay = `https://api.openweathermap.org/data/2.5/forecast?q=${arg1},${arg2}&units=metric&appid=b984a0e53a91bb44a82f7bbf270aa6cc`;
+        if (arg2) {
+            urlWeather = `https://api.openweathermap.org/data/2.5/weather?q=${arg1},${arg2}&units=metric&appid=${API}`;
+            urlFiveDay = `https://api.openweathermap.org/data/2.5/forecast?q=${arg1},${arg2}&units=metric&appid=${API}`;
+        }
+        else  {
+            urlWeather = `https://api.openweathermap.org/data/2.5/weather?q=${arg1}&units=metric&appid=${API}`;
+            urlFiveDay = `https://api.openweathermap.org/data/2.5/forecast?q=${arg1}&units=metric&appid=${API}`;
+        }
     }
-        
     else if (typeof(arg1) === 'number' && typeof(arg2) === 'number') {
-        urlWeather = `https://api.openweathermap.org/data/2.5/weather?lat=${arg1}&lon=${arg2}&units=metric&appid=b984a0e53a91bb44a82f7bbf270aa6cc`;
-        urlFiveDay = `https://api.openweathermap.org/data/2.5/forecast?lat=${arg1}&lon=${arg2}&units=metric&appid=b984a0e53a91bb44a82f7bbf270aa6cc`;
+        urlWeather = `https://api.openweathermap.org/data/2.5/weather?lat=${arg1}&lon=${arg2}&units=metric&appid=${API}`;
+        urlFiveDay = `https://api.openweathermap.org/data/2.5/forecast?lat=${arg1}&lon=${arg2}&units=metric&appid=${API}`;
 
     }
-
-    else console.log('changeLocation had bad arguments passed!\n' + arg1 + ' and ' + arg2);
+    else console.log('changeLocation had bad arguments passed!\n\'' + arg1 + '\' and \'' + arg2 +'\'');
 
     updateWeather(urlWeather);
     updateFiveDayForecast(urlFiveDay);
@@ -57,8 +69,10 @@ function changeLocation(arg1, arg2 = null) {
 
 async function updateWeather(url) {
     //ask API for the current weather
-    const {main, name, sys, weather, wind} = await this.fetchWeather(url);
+    const {main, name, sys, weather, wind, timezone, visibility} = await fetchWeather(url);
     if (!main) return;
+
+    let GMT = ("+" + (timezone / 3600)).slice(-2);
 
     // easier than making and assigning 100 variables, but every time the html changes, this has to change too
     const weatherHTML = document.querySelector('.weather-container');
@@ -72,36 +86,45 @@ async function updateWeather(url) {
 
         <h4 class="weather-desc">${weather[0].main}</h4>
         <p class="weather-caption">
-            <span class="w-feels">feels like ${Math.round(main.feels_like)}°</span>
-            <span class="w-wind">wind ${wind.speed} km/h</span>
-            <span class="w-humidity">humidity ${main.humidity}%</span>
+            <span class="w-feels">Feels like ${Math.round(main.feels_like)}°</span>
+            <span class="w-wind">Wind ${Math.round(wind.speed)} km/h</span>
+            <span class="w-vis">Visibility ${Math.round(visibility / 1000)}km</span>
+        </p>
+        <p class="weather-caption">
+            <span class="w-pressure">Barometer ${main.pressure}mb</span>
+            <span class="w-humidity">Humidity ${main.humidity}%</span>
+            <span class="w-zone">Timezone ${GMT} GMT </span>
         </p>
     `
     document.body.style.backgroundImage = `url('./img/${weather[0].icon}.jpg')`;
-    updateDetails(main, sys, weather, wind)
 }
 
 async function updateFiveDayForecast(url) {
     //ask API for the five day forecast
-    const data = await this.fetchWeather(url);
-    if (!data.list) return;
+    const data = await fetchWeather(url);
+    if (!data || !data.list) return;
 
     // global variable so it can be accessed anytime
     DATA = data.list;
+    DATA.push(data.city);
     
     const forecast = document.querySelector('.forecast-container');
     forecast.innerHTML = '';
 
     // API returns forecast in 40 3-hour chunks, hence i +=8 to increase by day
-    for (let i = 0; i < data.list.length; i += 8) {
+    for (let i = 0; i < data.list.length - 1; i += 8) {
         // turn the full date into a data string like 'Mon Mar 27 2020' and split it 
         const d = new Date(data.list[i].dt_txt).toDateString().split(' ');
         // keeping only 'Mon 27'
         const dateDay = d[0] + ' ' + d[2];
+        const { description, icon } = DATA[i].weather[0]; 
 
-        // get rest of the data from API add chunks of html
-        const { temp_max, temp_min } = data.list[i].main;
-        const { description, icon } = data.list[i].weather[0]; 
+        let { temp_max, temp_min } = DATA[i].main;
+        for (let j = 0; j < 8; j++) {
+            if (DATA[i + j].main.temp_max > temp_max) temp_max = DATA[i + j].main.temp_max
+            if (DATA[i + j].main.temp_min < temp_min) temp_min = DATA[i + j].main.temp_min
+        }
+
 
         forecast.innerHTML += `
             <div class="forecast" id="f${i}">
@@ -115,38 +138,56 @@ async function updateFiveDayForecast(url) {
             </div>
         `
     }
-
+    
     // adds clicking on daily forecasts updates graph for that day
     const forecasts = document.querySelectorAll('.forecast');
     forecasts.forEach((forecast) => {
         const ID = parseInt(forecast.id.slice(1));
-        forecast.onclick = () => drawHourlyChart(ID);
+        forecast.addEventListener('click', () => {
+            updateDetails(ID);
+            drawHourlyChart(ID);
+        });
     })
-
+    
+    // default chart and details are for the first day
+    updateDetails(0)
     drawHourlyChart(0);
 }
 
 // gets called from updateWeather
-function updateDetails(main, sys, weather, wind) {
+// SHOULD GET CALLED FROM 5-DAY SO IT UPDATES FOR EVERY DAY
+function updateDetails(ID) {
     const details = document.querySelectorAll('.detail');
 
-    // day and night
-    const dayNight = details[0].querySelectorAll('p');
-    dayNight[0].innerHTML = `The high will be ${Math.round(main.temp_max)}°.`;
-    dayNight[1].innerHTML = `The low will be ${Math.round(main.temp_min)}°.`;
+    const main = DATA[ID].main;
+    const wind = DATA[ID].wind;
+
+    // highs and lows - figuring out WHEN it is day or night with the data is a headache
+    const dayNight = document.querySelectorAll('.detail')[0].querySelectorAll('p');
+
+    let { temp_max, temp_min } = DATA[ID].main;
+    for (let i = 0; i < 8; i++) {
+        if (DATA[ID + i].main.temp_max > temp_max) temp_max = DATA[ID + i].main.temp_max
+        if (DATA[ID + i].main.temp_min < temp_min) temp_min = DATA[ID + i].main.temp_min
+    }
+
+    dayNight[0].innerHTML = `The high will be ${Math.round(temp_max)}°.`;
+    dayNight[1].innerHTML = `The low will be ${Math.round(temp_min)}°.`;
 
     //sunrise and sunset
     // * 1000 to convert from seconds to milliseconds, then slice just the hours/mins
     const sunDetails = details[1].querySelectorAll('p');
-    const sunRise = new Date(sys.sunrise*1000).toTimeString().slice(0, 5);
-    const sunSet = new Date(sys.sunset*1000).toTimeString().slice(0, 5);
+    const timezone = DATA[DATA.length-1].timezone;
+    const sunRise = new Date((DATA[DATA.length-1].sunrise + timezone)*1000).toTimeString().slice(0, 5);
+    const sunSet = new Date((DATA[DATA.length-1].sunset + timezone)*1000).toTimeString().slice(0, 5);
     sunDetails[0].innerHTML = `${sunRise}`;
     sunDetails[1].innerHTML = `${sunSet}`;
 
     // moonrise and moonset
+    // API doesn't give this data... sooo
     const moonRiseSet = details[2].querySelectorAll('p');
-    moonRiseSet[0].innerHTML = `${16}`;
-    moonRiseSet[1].innerHTML = `${26}`;
+    moonRiseSet[0].innerHTML = `22:12`;
+    moonRiseSet[1].innerHTML = `06:42`;
 
     // circle graph dummy data
     const precip = 80;
@@ -154,7 +195,7 @@ function updateDetails(main, sys, weather, wind) {
     // iterates over canvasses
     const graphData = [precip, main.humidity, UV, wind];  
 
-    for (i = 0; i < graphData.length; i++) {
+    for (let i = 0; i < graphData.length; i++) {
         drawCircleCharts(graphData[i], i);
     }
 }
@@ -232,10 +273,9 @@ function drawCircleCharts(graphData, p) {
 // uses Chart.js, gets called from updateFiveDayForecast
 // or by clicking on a daily forecast
 function drawHourlyChart(ID) {
-    console.log('hi');
-
     const ctx = document.getElementById('4');
     const hourlyData = [];
+    const timezone = DATA[DATA.length-1].timezone;
 
     for (let i = ID; i < ID + 8; i++) {
         let temp = Math.round(DATA[i].main.temp);
@@ -243,16 +283,15 @@ function drawHourlyChart(ID) {
     }
     
     for (let i = 0; i < 8; i++) {
-        let time = DATA[i].dt_txt.slice(-8, -3);
+        let time = new Date((DATA[i].dt + timezone)*1000).toTimeString().slice(0, 5);;
         hourlyData.push(time)
     }
+
+    // (DATA[DATA.length-1].sunset + timezone)*1000).toTimeString().slice(0, 5);
 
     const hourlyLabels = hourlyData.slice(0, 8).map((n) => {
         return n.toString() + '°';
     })
-
-    console.log(hourlyData)
-    console.log(hourlyLabels)
 
     const yMin = Math.min(...hourlyData.slice(0, 8)) - 2;
     const yMax = Math.max(...hourlyData.slice(0, 8)) + 1;
@@ -311,40 +350,155 @@ function drawHourlyChart(ID) {
     })
 }
 
+function autocomplete() {
+    const input = document.getElementById('search');
+    
+    // clears input on page refresh
+    input.value = '';
+
+    // which result we're highlighting, if any
+    let focus = -1;
+
+    // every time you type in here... things happen
+    input.addEventListener('input', function (e) {
+        closeOldList();
+        const val = this.value.toLowerCase();
+
+        // new div to contain cities
+        const containerDiv = document.createElement('div');
+        containerDiv.setAttribute('class', 'auto-items')
+        this.parentNode.appendChild(containerDiv);
+
+        
+        // searches the big countries list, returns the first 5 matches
+        let arr = [];
+        const countries = Object.keys(COUNTRIES);
+
+        search:
+        for (let i = 0; i < countries.length; i++) {
+            let cities = COUNTRIES[countries[i]];
+            for (let j = 0; j < cities.length; j++) {
+                if (cities[j].toLowerCase().includes(val)) {
+                    // add to array and update results
+                    let info = {
+                        country: Object.keys(COUNTRIES)[i],
+                        city: cities[j],
+                    }
+                    arr.push(info);
+
+                    // make each result, make it clickable
+                    const resultDiv = document.createElement('div');
+                    resultDiv.innerHTML = `${info.city}, ${info.country}`;
+                    resultDiv.addEventListener('click', (e) => {
+                        selectLocation(e.target.innerHTML);
+                        closeOldList();
+                        this.value = '';
+                    })
+
+                    containerDiv.appendChild(resultDiv);
+                    if (arr.length === 5) break search;
+                }
+            }
+        }
+    })
+
+    input.addEventListener('keydown', (e) => {
+        let results = document.querySelector('.auto-items')
+        if (results) results = results.children;
+        else return
+
+        switch (e.key) {
+            case 'Enter':
+                // prevent form submission, and if something is highlighted, click it
+                e.preventDefault();
+                if (focus >= 0 && focus < 5) results[focus].click();
+                break;
+            case 'ArrowUp':
+                focus--;
+                addFocus(results);
+                break;
+            case 'ArrowDown':
+                focus ++;
+                addFocus(results);
+                break;
+        }
+    });
+
+    // highlights results
+    function addFocus(results) {
+        // first we reset
+        [...results].forEach(r => r.classList.remove('auto-active'));
+
+        if (focus >= results.length) focus = 0;
+        else if (focus < 0) focus = results.length - 1;
+        results[focus].classList.add('auto-active');
+    }
+
+    // place gets split into [city, country]
+    function selectLocation(place) {
+        place = place.split(', ');
+
+        // replaces country name with country code for the API
+        for (let i = 0; i < Object.keys(ISO).length; i++) {
+            if (Object.values(ISO)[i] === place[1]) {
+                place[1] = Object.keys(ISO)[i];
+            }
+        }
+
+        changeLocation(place[0], place[1]);
+    }
+
+    function closeOldList() {
+        // closes the autocomplete lists!
+        const list = document.querySelector('.auto-items');
+        if (!list) return
+        else list.remove();
+    }
+
+    document.addEventListener('click', () => {
+        focus = -1;
+        closeOldList();
+    })
+}
+
+function modal() {
+    const modal = document.getElementById('about-modal');
+    const btn = document.getElementById('about');
+    const closeIcon = document.getElementById('about-close');
+
+    btn.addEventListener('click', () => modal.style.display = 'block')
+    closeIcon.addEventListener('click', () => modal.style.display = 'none')
+    window.addEventListener('click', (e) => {if (e.target === modal) modal.style.display = 'none'})
+}
+
 // adds all event listeners
 window.addEventListener('DOMContentLoaded', (e) => {
 
     // makes the info icon clickable for mobile
     const icon = document.querySelector('.search-icon');
     const tooltip = document.querySelector('.search-tooltip');
-    icon.onclick = () => {
-        tooltip.classList.toggle('hidden');
-    }
+    icon.addEventListener('click', () => tooltip.classList.toggle('hidden'));
 
-    // search functionality, placename and (optionally) country or state code
-    const search = document.querySelector('.search')
-    // clears input box when page refreshes
-    search.value = '';
-    search.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-            const searchText = search.value;
 
-            if (searchText.search(',')) {
-                console.log('hi');
-                const cityAndCode = searchText.split(',');
-                changeLocation(cityAndCode[0], cityAndCode[1]);
-            }
-        }
-    });
+    // OLD SEARCH, WE MAKE A NEW ONE
+    // search.addEventListener('keydown', (e) => {
+    //     if (e.key === 'Enter') {
+    //         const searchText = search.value;
+
+    //         if (searchText.search(',')) {
+    //             const cityAndCode = searchText.split(',');
+    //             console.log(cityAndCode)
+    //             changeLocation(cityAndCode[0], cityAndCode[1]);
+    //         }
+    //     }
+    // });
+
+    // NEW SEARCH:
+    autocomplete();
 
     // opens and closes the 'about' modal
-    const modal = document.getElementById('about-modal');
-    const btn = document.getElementById('about');
-    const closeIcon = document.getElementById('about-close');
     // click on close or anywhere outside the modal to close it
-    btn.onclick = () => modal.style.display = 'block';
-    closeIcon.onclick = () => modal.style.display = 'none';
-    window.onclick = (e) => {if (e.target === modal) modal.style.display = 'none';}
+    modal();    
 
     // loads default location
     changeLocation('London','GB');
