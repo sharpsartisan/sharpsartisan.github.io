@@ -14,20 +14,18 @@
 //         });  
 // })
 
-// fetches that data, babey!
 
+// big list of countries, their country codes, API token and Chart.js plugin
 import COUNTRIES from './countries.js';
 import ISO from './iso.js';
-
 const API = 'b984a0e53a91bb44a82f7bbf270aa6cc';
-
-// for Chart.js datalabels plugin
 Chart.register(ChartDataLabels)
 
-// actual global variable... #sad
+// actual global variables... #sad
 let DATA = [];
 let CHARTS = new Array(5);
 
+// fetches that data, babey!
 async function fetchWeather(url) {
     return fetch(url)
         .then(response => response.json())
@@ -125,7 +123,7 @@ async function updateFiveDayForecast(url) {
             if (DATA[i + j].main.temp_min < temp_min) temp_min = DATA[i + j].main.temp_min
         }
 
-
+        // makes the 5 daily forecast tiles
         forecast.innerHTML += `
             <div class="forecast" id="f${i}">
                 <h4 class="fore-day">${dateDay}</h4>
@@ -139,7 +137,7 @@ async function updateFiveDayForecast(url) {
         `
     }
     
-    // adds clicking on daily forecasts updates graph for that day
+    // clicking on daily forecasts updates the graph for that day
     const forecasts = document.querySelectorAll('.forecast');
     forecasts.forEach((forecast) => {
         const ID = parseInt(forecast.id.slice(1));
@@ -154,8 +152,7 @@ async function updateFiveDayForecast(url) {
     drawHourlyChart(0);
 }
 
-// gets called from updateWeather
-// SHOULD GET CALLED FROM 5-DAY SO IT UPDATES FOR EVERY DAY
+// gets called from updateFiveDayForecast
 function updateDetails(ID) {
     const details = document.querySelectorAll('.detail');
 
@@ -192,9 +189,9 @@ function updateDetails(ID) {
     // circle graph dummy data
     const precip = 80;
     const UV = 1;
-    // iterates over canvasses
-    const graphData = [precip, main.humidity, UV, wind];  
 
+    // asks for the four graphs
+    const graphData = [precip, main.humidity, UV, wind];  
     for (let i = 0; i < graphData.length; i++) {
         drawCircleCharts(graphData[i], i);
     }
@@ -206,11 +203,13 @@ function drawCircleCharts(graphData, p) {
     const ctx = document.getElementById(`${p}`);
     const text = document.querySelectorAll('.graph > p')[p];
 
+    // old graph must be removed to make a new one
+    if (CHARTS[p]) CHARTS[p].destroy();
+
     // draws the wind circle graph
     if (p === 3) {
-        text.innerHTML = `${graphData.speed} km/h`;
+        text.innerHTML = `${Math.round(graphData.speed)} <span class="small">km/h</span>`;
 
-    if (CHARTS[p]) CHARTS[p].destroy();
     CHARTS[p] = new Chart(ctx, {
             type: 'doughnut',
     
@@ -229,20 +228,31 @@ function drawCircleCharts(graphData, p) {
     
             data: {
                 datasets: [{
-                    backgroundColor: ['rgb(20,220,255)', 'rgb(126,138,143)'],
-                    data: [graphData, 100 - graphData],
-                    borderWidth: 0,
-                }]
+                    backgroundColor: ['rgb(20,220,255)',
+                        'rgb(126,138,143)',
+                        'rgb(126,138,143)',
+                        'rgb(126,138,143)',
+                        'rgb(126,138,143)',
+                        'rgb(126,138,143)',
+                        'rgb(126,138,143)',
+                        'rgb(126,138,143)'],
+                    data: [1, 1, 1, 1, 1, 1, 1, 1],
+                    borderWidth: 1,
+                    borderColor: ['rgb(20,220,255)'],
+                    rotation: graphData.deg,
+                }],
+                labels: [
+                    'North', 'Northeast', 'East', 'Southeast', 'South', 'Southwest', 'West', 'Northwest'
+                ]
             }
         })
     }
 
     // draws the other circle graphs
     else {
-        if (p === 2) text.innerHTML = `${graphData} (Low)`; 
+        if (p === 2) text.innerHTML = `${graphData} <span class="small">(Low)</span>`; 
         else text.innerHTML = `${graphData}%`;
 
-        if (CHARTS[p]) CHARTS[p].destroy();
         CHARTS[p] = new Chart(ctx, {
             type: 'doughnut',
     
@@ -270,13 +280,13 @@ function drawCircleCharts(graphData, p) {
     }
 }
 
-// uses Chart.js, gets called from updateFiveDayForecast
-// or by clicking on a daily forecast
+// uses Chart.js, gets called from updateFiveDayForecast or by clicking the tiles
 function drawHourlyChart(ID) {
     const ctx = document.getElementById('4');
     const hourlyData = [];
     const timezone = DATA[DATA.length-1].timezone;
 
+    // there's probably a tidier way
     for (let i = ID; i < ID + 8; i++) {
         let temp = Math.round(DATA[i].main.temp);
         hourlyData.push(temp);
@@ -286,8 +296,6 @@ function drawHourlyChart(ID) {
         let time = new Date((DATA[i].dt + timezone)*1000).toTimeString().slice(0, 5);;
         hourlyData.push(time)
     }
-
-    // (DATA[DATA.length-1].sunset + timezone)*1000).toTimeString().slice(0, 5);
 
     const hourlyLabels = hourlyData.slice(0, 8).map((n) => {
         return n.toString() + '°';
@@ -359,12 +367,12 @@ function autocomplete() {
     // which result we're highlighting, if any
     let focus = -1;
 
-    // every time you type in here... things happen
+    // every time you type in search... things happen
     input.addEventListener('input', function (e) {
         closeOldList();
         const val = this.value.toLowerCase();
 
-        // new div to contain cities
+        // new div to contain matches
         const containerDiv = document.createElement('div');
         containerDiv.setAttribute('class', 'auto-items')
         this.parentNode.appendChild(containerDiv);
@@ -386,7 +394,7 @@ function autocomplete() {
                     }
                     arr.push(info);
 
-                    // make each result, make it clickable
+                    // make each results' HTML, make it clickable
                     const resultDiv = document.createElement('div');
                     resultDiv.innerHTML = `${info.city}, ${info.country}`;
                     resultDiv.addEventListener('click', (e) => {
@@ -400,10 +408,24 @@ function autocomplete() {
                 }
             }
         }
+
+        // if no results were found
+        if (!arr.length) {
+            const resultDiv = document.createElement('div');
+            resultDiv.innerHTML = 'No results found';
+            resultDiv.addEventListener('click', () => {
+                closeOldList();
+                this.value = '';
+            })
+            containerDiv.appendChild(resultDiv);
+        }
     })
 
+    // allows arrow keys to search list
     input.addEventListener('keydown', (e) => {
         let results = document.querySelector('.auto-items')
+
+        // prevents a warning about 'results' being undefined if you try to select its children straight away
         if (results) results = results.children;
         else return
 
@@ -448,19 +470,21 @@ function autocomplete() {
         changeLocation(place[0], place[1]);
     }
 
+    // closes the autocomplete lists!
     function closeOldList() {
-        // closes the autocomplete lists!
         const list = document.querySelector('.auto-items');
         if (!list) return
         else list.remove();
     }
 
+    // click anywhere but the results and they close
     document.addEventListener('click', () => {
         focus = -1;
         closeOldList();
     })
 }
 
+// makes the modal open and close
 function modal() {
     const modal = document.getElementById('about-modal');
     const btn = document.getElementById('about');
@@ -471,7 +495,7 @@ function modal() {
     window.addEventListener('click', (e) => {if (e.target === modal) modal.style.display = 'none'})
 }
 
-// adds all event listeners
+// threw almost everything that wasn't in a function in here
 window.addEventListener('DOMContentLoaded', (e) => {
 
     // makes the info icon clickable for mobile
@@ -479,25 +503,8 @@ window.addEventListener('DOMContentLoaded', (e) => {
     const tooltip = document.querySelector('.search-tooltip');
     icon.addEventListener('click', () => tooltip.classList.toggle('hidden'));
 
-
-    // OLD SEARCH, WE MAKE A NEW ONE
-    // search.addEventListener('keydown', (e) => {
-    //     if (e.key === 'Enter') {
-    //         const searchText = search.value;
-
-    //         if (searchText.search(',')) {
-    //             const cityAndCode = searchText.split(',');
-    //             console.log(cityAndCode)
-    //             changeLocation(cityAndCode[0], cityAndCode[1]);
-    //         }
-    //     }
-    // });
-
-    // NEW SEARCH:
+    // these add their own event listeners
     autocomplete();
-
-    // opens and closes the 'about' modal
-    // click on close or anywhere outside the modal to close it
     modal();    
 
     // loads default location

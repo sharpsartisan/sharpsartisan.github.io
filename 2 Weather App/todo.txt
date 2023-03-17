@@ -1,18 +1,9 @@
 # TASK: AESTHETICS
 - add X and search icon to search bar
 
-# TASKS: MISC
-- make footer links open in new tab
-- figure out why live website doesn't display .pngs
-
-DEAL WITH API TOKEN THING
-
-# TASK: CREATE THE CIRCLE GRAPHS
-- make wind graph work
-
-# TASK: CREATE WEATHER GRAPHS
-- make labels have degree symbol on them (warning: unreasonably difficult)
-
+# TASK: FIX MOBILE BUGS
+- on iphone, weird space created at bottom
+- search input zooms in but doesn't zoom back out upon searching
 
 weather types:
 ID = xxx
@@ -27,12 +18,25 @@ ID = xxx
 
 COMPLETED:
 
+# TASK: TIDYING UP
+- go thru everything and add useful comments
+- clean up old code
+
+# TASK: FIX MOBILE BUGS
+- on iphone, weird space created at right
+- button text is dark blue on mobile when it should be white
+
 # TASK: MAKE THE SEARCH WORK
 - find a list of cities that isn't too big
 - make importing modules work why doesn't it work 
 - make search return first 5 results that match anywhere in the search text
 - make the results show up and look nice
 - pressing up and down keys highlights results
+- change search tooltip text (no longer works the old way)
+- create 'No results found' result (when clicked, clears list and search text)
+
+# TASK: CREATE WEATHER GRAPHS
+- make labels have degree symbol on them (not possible in chartjs!?)
 
 # TASKS: MISC
 - see if API gives moon phase info (it does not)
@@ -43,6 +47,8 @@ COMPLETED:
 - rewrite onclicks to be event listeners (google says they're better)
 - add visibility to main weather bit
 - see if API has pressure and add that to main weather bit too
+- figure out why live website doesn't display .pngs (it didn't like underscores)
+- make footer links open in new tab
 
 # TASKS: LOCAL TIME
 - make sunrise (and other times) in correct timezone
@@ -52,6 +58,7 @@ COMPLETED:
 - find out about relevant API data
 - plan out how to nicely loop thru canvasses to update them
 - add footer info about chart.js?
+- make wind graph work
 
 # TASK: AESTHETICS
 - add sun mon rise set icons
@@ -61,6 +68,7 @@ COMPLETED:
 - make info icon clickable for mobile
 - add nightttime background images
 - thin scrollbars!
+- remove 'summary' and 'details' buttons from the hourly graph (ive done enough)
 
 # TASK: ICONS 
 - find list of weather outputs (eg 'mostly cloudy' and 'sunny')

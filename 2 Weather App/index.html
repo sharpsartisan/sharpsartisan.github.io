@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./styles.css">
     <link rel="icon" href="./favicon.ico">
-    <title>WHAT'S UP, WEATHERBOY</title>
+    <title>Weather</title>
 </head>
 <body>
     <div class="loading"></div>
@@ -17,7 +17,7 @@
             <h4>Forecast</h4>
             <div class="search-info">
                 <span class="search-icon">ⓘ</span>
-                <span class="search-tooltip hidden">to specify a location, use the country code, e.g "Paris, US"</span>
+                <span class="search-tooltip hidden">forecast may not update if there is no data for the selected city</span>
             </div>
             <form autocomplete="off" action="">
                 <div class="autocomplete">
@@ -42,12 +42,10 @@
         <!-- graph for each 5-day -->
         <div class="hourly-wrapper">
             <h2 class="hourly">Hourly</h2>
-            <button class="hourly-details">Details</button>
-            <button class="hourly-summary">Summary</button>
         </div>
-            <div class="hourly-graph">
-                <canvas id="4"></canvas>
-            </div>
+        <div class="hourly-graph">
+            <canvas id="4"></canvas>
+        </div>
 
         <!-- detail boxes -->
         <h2 class="day-details">Day Details</h2>
@@ -114,8 +112,8 @@
             <div class="modal-content">
                 <span id="about-close" class="close">✖</span>
                 <p>This project is an attempt to clone the Weather app for Windows.
-                    Some data couldn't be replicated through limitations of the OpenWeather API,
-                    but I was able to create a fairly accurate repesentation of the main page.
+                    Some data (such as moonrise and phase) were not available through the OpenWeather API,
+                    but I was able to create a fairly accurate repesentation of the main page otherwise.
                 </p>
                 <p>Some of the skills this project taught me were:
                     <ul>
@@ -123,26 +121,19 @@
                         <li>Fetch requests and working with async / await</li>
                         <li>Creating a responsive site for both desktop and mobile devices</li>
                         <li>Working with external javascript libraries (Chart.js)</li>
+                        <li>Using the API data to create meaningful graphs</li>
                         <li>Manipulating date and time strings</li>
+                        <li>Creating a responsive dropdown list of search results</li>
                         <li>Using CSS Flexbox</li>
                         <li>Writing modular, readable javascript</li>
                         <li>Organising HTML and div grouping</li>
                         <li>Tracking changes and branches using Git</li>
                     </ul>
                 </p>
-                <p>Less 'official' skills I learned include:
-                    <ul>
-                        <li>Googling dozens of stackoverflow answers</li>
-                        <li>Writing a bunch of terrible code and immediately deleting it</li>
-                        <li>Continuing in the face of insurmountable odds</li>
-                        <li>Back stretches</li>
-                    </ul>
+                <p>Keeping my code modular and well-commented made it easy to manage
+                    even while working on difficult problems.
                 </p>
-                <p>Despite being a single page site, I was really pushed outside my comfort zone
-                    when it came to working with the API and keeping track of my code as the html, css, and js
-                    files all started to grow.
-                </p>
-                <p>I feel much more confident in all the areas in the list
+                <p>I feel much more confident in my ability to build a responsive website
                     and I believe this project really helped build my skills and understanding
                     of front-end development.
                 </p>
